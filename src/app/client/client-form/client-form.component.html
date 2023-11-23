@@ -1,0 +1,312 @@
+<div class="container">
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="col-12">
+                <div class="row mb-3">
+                    <label
+                    for="fullName"
+                    class="col-md-1 col-form-label">公司名稱</label>
+                    <div class="col-md-4">
+                        <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="client.fullName"
+                        id="fullName">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label
+                    for="guiNumber"
+                    class="col-md-1 col-form-label">統一編號</label>
+                    <div class="col-md-4">
+                        <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="client.guiNumber"
+                        id="guiNumber">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label
+                    class="col-md-1 col-form-label"></label>
+                    <div class="col-md-4">
+                        <button 
+                        class="btn btn-primary"
+                        type="button"
+                        (click)="addClientDetail()"
+                        [disabled]="clientDetails.length > 4">新增廠區</button>
+                    </div>
+                </div>
+                <hr/>
+                <div *ngFor="let detail of clientDetails; let i = index">
+                    <div class="row mb-3">
+                        <div class="col-md-1"></div>
+                        <label
+                        class="col-md-1 col-form-label"
+                        [for]="'branchName' + i">廠名(簡稱)</label>
+                        <div class="col-md-2">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [id]="'branchName' + i"
+                            [(ngModel)]="detail.branchName">
+                        </div>
+                        <div class="col-md-7"></div>
+                        <div class="col-md-1">
+                            <button
+                            class="btn btn-danger"
+                            type="button"
+                            (click)="removeClientDetail(i)"
+                            [disabled]="clientDetails.length < 2">移除</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-1"></div>
+                        <!-- 國家 -->
+                        <label
+                        [for]="'country' + i"
+                        class="col-md-1 col-form-label">所在地</label>
+                        <div class="col-md-2">
+                            <select
+                            class="form-select form-select-md"
+                            aria-label=".form-select-md"
+                            [id]="'country' + i"
+                            [(ngModel)]="detail.country"
+                            (ngModelChange)="detail.city = undefined; detail.town = undefined;">
+                                <option
+                                [ngValue]="undefined"
+                                hidden="true">請選擇</option>
+                                <option
+                                *ngFor="let country of countries"
+                                [value]="country.countryNameTw">{{ country.countryNameTw }}</option>
+                            </select>
+                        </div>
+                        <!-- 地址 -->
+                        <label class="col-md-1 col-form-label"
+                        [for]="'city' + i">地址</label>
+                        <!-- 臺灣 -->
+                        <!-- 縣市 -->
+                        <div
+                        class="col-md-2"
+                        *ngIf="detail.country === '臺灣'">
+                            <select
+                            class="form-select form-select-md"
+                            aria-label=".form-select-md"
+                            [(ngModel)]="detail.city"
+                            (ngModelChange)="setCityRef(detail.city, i)">
+                                <option
+                                [ngValue]="undefined"
+                                hidden="true">縣市</option>
+                                <option
+                                *ngFor="let taiwanCity of taiwanCities"
+                                [value]="taiwanCity.CityName">{{ taiwanCity.CityName }}</option>
+                            </select>
+                        </div>
+                        <!-- 鄉鎮市區 -->
+                        <div
+                        class="col-md-2"
+                        *ngIf="detail.country === '臺灣'">
+                            <select
+                            class="form-select form-select-md"
+                            aria-label=".form-select-md"
+                            [(ngModel)]="detail.town">
+                                <option
+                                [ngValue]="undefined"
+                                hidden="true">鄉鎮市區</option>
+                                <option
+                                *ngFor="let town of cityRefDetails[i]?.AreaList"
+                                [value]="town.AreaName">{{ town.AreaName }}</option>
+                            </select>
+                        </div>
+                        <!-- 地址 -->
+                        <div class="col-md-2" *ngIf="detail.country === '臺灣'">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="detail.address">
+                        </div>
+                        <!-- 非臺灣 -->
+                        <div class="col-md-2" *ngIf="detail.country !== '臺灣'">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [placeholder]="detail.country === '臺灣' ? '縣市' : 'City'"
+                            [id]="'city' + i"
+                            [(ngModel)]="detail.city">
+                        </div>
+                        <div class="col-md-4" *ngIf="detail.country !== '臺灣'">
+                            <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Address"
+                            [(ngModel)]="detail.address">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-1"></div>
+                        <label
+                        [for]="'dealer1' + i"
+                        class="col-md-1 col-form-label">主要聯絡人</label>
+                        <div class="col-md-2">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="detail.dealer1"
+                            [id]="'dealer1' + i">
+                        </div>
+                        <label
+                        [for]="'dealerphone1' + i"
+                        class="col-md-1 col-form-label">電話/手機</label>
+                        <div class="col-md-2">
+                            <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="detail.dealerPhone1"
+                            [id]="'dealerphone1' + i">
+                        </div>
+                        <label
+                        [for]="'dealerEmail1' + i"
+                        class="col-md-1 col-form-label">Email</label>
+                        <div class="col-md-3">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="detail.dealerEmail1"
+                            [id]="'dealerEmail1' + i">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-1"></div>
+                        <label
+                        [for]="'dealer2' + i"
+                        class="col-md-1 col-form-label">次要聯絡人</label>
+                        <div class="col-md-2">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="detail.dealer2"
+                            [id]="'dealer2' + i">
+                        </div>
+                        <label
+                        [for]="'dealerphone2' + i"
+                        class="col-md-1 col-form-label">電話/手機</label>
+                        <div class="col-md-2">
+                            <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="detail.dealerPhone2"
+                            [id]="'dealerphone2' + i">
+                        </div>
+                        <label
+                        [for]="'dealerEmail2' + i"
+                        class="col-md-1 col-form-label">Email</label>
+                        <div class="col-md-3">
+                            <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="detail.dealerEmail2"
+                            [id]="'dealerEmail2' + i">
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+                <fieldset class="row mb-1">
+                    <legend class="col-form-label col-md-1 pt-0">行業別</legend>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input
+                            class="form-check-input"
+                            type="radio"
+                            name="gridRadios"
+                            id="type1"
+                            [(ngModel)]="client.type"
+                            value="1">
+                            <label
+                            class="form-check-label"
+                            for="type1">電子業</label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                            class="form-check-input"
+                            type="radio"
+                            name="gridRadios"
+                            id="type2"
+                            [(ngModel)]="client.type"
+                            value="2">
+                            <label
+                            class="form-check-label"
+                            for="type2">工程業、實驗室</label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                            class="form-check-input"
+                            type="radio"
+                            name="gridRadios"
+                            id="type3"
+                            [(ngModel)]="client.type"
+                            value="3">
+                            <label
+                            class="form-check-label"
+                            for="type3">化學業、化工業、材料業</label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                            class="form-check-input"
+                            type="radio"
+                            name="gridRadios"
+                            id="type4"
+                            [(ngModel)]="client.type"
+                            value="4">
+                            <label
+                            class="form-check-label"
+                            for="type4">食品業、生技業、包裝業</label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                            class="form-check-input"
+                            type="radio"
+                            name="gridRadios"
+                            id="type5"
+                            [(ngModel)]="client.type"
+                            value="5">
+                            <label
+                            class="form-check-label"
+                            for="type5">其他</label>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="row mb-3">
+                    <label
+                    for="remark"
+                    class="col-md-1 col-form-label">備註</label>
+                    <div class="col-md-10 col-form-label">
+                        <textarea
+                        class="form-control"
+                        [(ngModel)]="client.remark"
+                        id="remark"
+                        style="height: 100px"></textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label
+                    for="ndaFlg"
+                    class="col-md-1 col-form-label">保密協議</label>
+                    <div class="col-md-3 col-form-label">
+                        <input
+                        type="checkbox"
+                        class="form-check-input"
+                        [(ngModel)]="client.ndaFlg"
+                        id="ndaFlg">
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button
+                class="btn btn-primary"
+                (click)="submit()">
+                送出
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
