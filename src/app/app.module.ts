@@ -13,13 +13,17 @@ import { Service } from 'src/service/service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SwalService } from 'src/service/swal.service';
 import { ClientService } from 'src/service/client.service';
+import { ClientListComponent } from './client/client-list/client-list.component';
+import { ClientChartComponent } from './client/client-list/client-chart/client-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserListComponent,
     UserFormComponent,
-    ClientFormComponent
+    ClientFormComponent,
+    ClientListComponent,
+    ClientChartComponent
   ],
   imports: [
     BrowserModule,
