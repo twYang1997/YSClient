@@ -80,7 +80,17 @@ export class ClientFormComponent implements OnInit {
             this.swalService.loadingSwal();
             this.clientService.insertClient(clientData).subscribe({
                 next: (result) => {
-                    this.swalService.successSwal();
+                    switch (result) {
+                        case 'dup':
+                            this.swalService.infoSwal('重複的統一編號');
+                            break;
+                        case 'error':
+                            this.swalService.failedSwal();
+                            break;
+                        case 'success':
+                            this.swalService.successSwal();
+                            break;
+                    }
                 },
                 error: () => {
                     this.swalService.failedSwal();

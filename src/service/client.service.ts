@@ -55,7 +55,6 @@ export class ClientService {
                 if (key != 'id' && !value) {
                     detail[key as keyof ClientDetail] = '';
                 }
-                
 
             }
         }

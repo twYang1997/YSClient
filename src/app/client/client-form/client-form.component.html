@@ -109,6 +109,7 @@
                             <select
                             class="form-select form-select-md"
                             aria-label=".form-select-md"
+                            [disabled]="!detail.city"
                             [(ngModel)]="detail.town">
                                 <option
                                 [ngValue]="undefined"
