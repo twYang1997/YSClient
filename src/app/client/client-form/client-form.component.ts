@@ -1,6 +1,6 @@
 import { Component, OnInit} from "@angular/core";
 import { Client, ClientDetail, ClientData } from "src/model/client";
-import { Country, TaiwanCity } from "src/model/jsonFile";
+import { Country, TaiwanCity, Type } from "src/model/jsonFile";
 import { ClientService } from "src/service/client.service";
 import { Service } from "src/service/service";
 import { SwalService } from "src/service/swal.service";
@@ -16,6 +16,8 @@ export class ClientFormComponent implements OnInit {
 
     taiwanCities: TaiwanCity[];
     
+    businessTypes: Type[];
+
     constructor(
         public service: Service,
         public swalService: SwalService,
@@ -31,6 +33,11 @@ export class ClientFormComponent implements OnInit {
                 this.taiwanCities = result;
             }
         );
+        this.service.getJsonData('businessType').subscribe(
+            (result: Type[]) => {
+                this.businessTypes = result;
+            }
+        )
     }
 
     client: Client;
@@ -100,9 +107,7 @@ export class ClientFormComponent implements OnInit {
         } else {
 
             this.swalService.infoSwal('請輸入' + checkResult);
-
         }
-        
 
     }
 

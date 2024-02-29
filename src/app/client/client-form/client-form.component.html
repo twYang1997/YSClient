@@ -214,65 +214,17 @@
                 <fieldset class="row mb-1">
                     <legend class="col-form-label col-md-1 pt-0">行業別</legend>
                     <div class="col-md-4">
-                        <div class="form-check">
+                        <div *ngFor="let businessType of businessTypes; let i = index" class="form-check">
                             <input
                             class="form-check-input"
                             type="radio"
                             name="gridRadios"
-                            id="type1"
+                            [id]="'type' + i"
                             [(ngModel)]="client.type"
-                            value="1">
+                            [value]="businessType.value">
                             <label
                             class="form-check-label"
-                            for="type1">電子業</label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                            class="form-check-input"
-                            type="radio"
-                            name="gridRadios"
-                            id="type2"
-                            [(ngModel)]="client.type"
-                            value="2">
-                            <label
-                            class="form-check-label"
-                            for="type2">工程業、實驗室</label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                            class="form-check-input"
-                            type="radio"
-                            name="gridRadios"
-                            id="type3"
-                            [(ngModel)]="client.type"
-                            value="3">
-                            <label
-                            class="form-check-label"
-                            for="type3">化學業、化工業、材料業</label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                            class="form-check-input"
-                            type="radio"
-                            name="gridRadios"
-                            id="type4"
-                            [(ngModel)]="client.type"
-                            value="4">
-                            <label
-                            class="form-check-label"
-                            for="type4">食品業、生技業、包裝業</label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                            class="form-check-input"
-                            type="radio"
-                            name="gridRadios"
-                            id="type5"
-                            [(ngModel)]="client.type"
-                            value="5">
-                            <label
-                            class="form-check-label"
-                            for="type5">其他</label>
+                            [for]="'type' + i">{{ businessType.type }}</label>
                         </div>
                     </div>
                 </fieldset>

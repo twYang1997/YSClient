@@ -7,6 +7,7 @@ export class Country {
         public phoneCode: string
     ) {}
 }
+
 export class TaiwanCity {
     constructor(
         public CityName: string,
@@ -16,5 +17,12 @@ export class TaiwanCity {
             AreaName: string;
             AreaEngName: string;
         } []
+    ) {}
+}
+
+export class Type {
+    constructor(
+        public type: string,
+        public value: string
     ) {}
 }
